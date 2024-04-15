@@ -5,7 +5,7 @@
   <h1>912</h1>
   <ul>
     {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
+      <li><span>{{ g.user['username'] }} - {{g.user['email']}}</span>
       <li><a href="{{ url_for('auth.logout') }}">Cerrar Sesion</a>
     {% else %}
       <li><a href="{{ url_for('auth.register') }}">Registrarse</a>
