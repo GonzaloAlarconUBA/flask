@@ -80,6 +80,8 @@ def load_logged_in_user():
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
 
+
+
 @bp.route('/logout')
 def logout():
     session.clear()
@@ -94,3 +96,40 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+@bp.route('/new_email', methods=('GET', 'POST'))
+@login_required
+def new_email():
+    if request.method == 'POST':
+        email = request.form['newEmail']
+        db = get_db()
+        error = None
+        if not email:
+            error = 'Se necesita un email' 
+        elif error is None:
+            db.execute(
+                'UPDATE user SET email = ?'
+                ' WHERE id = ?',
+                (email, g.user['id'],)
+            )
+            db.commit()
+            return redirect(url_for('index'))
+
+    return render_template('auth/new_email.html')
+
+@bp.route('/delUser', methods=('GET', 'POST'))
+@login_required
+def delUser():
+    if request.method == 'POST':
+        db = get_db()
+        error = None
+        if error is None:
+            db.execute(
+                'DELETE FROM user WHERE id = ?',
+                (g.user['id'],)
+            )
+            db.commit()
+            session.clear()
+            return redirect(url_for('index'))
+
+    return render_template('auth/new_email.html')

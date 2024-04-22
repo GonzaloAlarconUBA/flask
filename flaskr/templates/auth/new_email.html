@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %} {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="newEmail">Titulo</label>
+    <input name="newEmail" id="newEmail"
+      placeholder ="{{ request.form['email'] or g.user['email'] }} (email actual)" required>
+    <input type="submit" value="Guardar cambios">
+  </form>
+  <hr>
+  <form action="{{ url_for('auth.delUser') }}" method="post">
+    <input class="danger" id="delUser" type= "submit" value="Eliminar" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}
